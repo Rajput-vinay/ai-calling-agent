@@ -44,7 +44,7 @@ export function LeftNavbar() {
       {/* Mobile Topbar */}
       {isMobile && (
         <div className="p-4 bg-[#1c1c1c] flex justify-between items-center sticky top-0 z-100">
-          <h1 className="text-[#63FBEF] text-xl font-semibold">Dashboard</h1>
+          <h1 className="text-[#63FBEF] text-xl font-semibold">AI Calling Agent</h1>
           <button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X className="text-white" /> : <Menu className="text-white" />}
           </button>
