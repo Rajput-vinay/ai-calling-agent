@@ -161,7 +161,7 @@ export function UploadPopup({
             {!showPreview && (
               <button
                 onClick={handlePreview}
-                className="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 mb-4 transition-all"
+                className="w-full bg-[#2a2a2a] text-white font-semibold py-2 rounded-lg  mb-4 transition-all"
               >
                 Preview File Content
               </button>

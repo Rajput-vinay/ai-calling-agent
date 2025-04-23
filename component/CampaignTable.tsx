@@ -78,21 +78,21 @@ const CampaignTable = () => {
       {campaigns.map((campaign, idx) => (
         <div
           key={idx}
-          className="grid grid-cols-5 items-center py-4 px-3 border-b border-gray-800 hover:bg-[#1A1A1A]"
+          className="grid grid-cols-5 items-center py-4 px-3 border-b border-gray-800 hover:bg-[#1A1A1A] text-sm md:text-md lg:text-md"
         >
           <div>{campaign.name}</div>
 
-          <div className={clsx("flex items-center gap-2 w-18 p-2 pr-2 rounded-md",statusColor[campaign.status])}>
+          <div className={clsx("flex items-center gap-2 w-18 p-2 pr-2 text-sm md:text-md lg:text-md rounded-md",statusColor[campaign.status])}>
             <span className={clsx("w-2 h-2 rounded-full", statusColor[campaign.status])}></span>{campaign.status}
             
           </div>
 
-          <div className="flex items-center gap-2">
-            <ProgressBar value={campaign.progress} />
+          <div className="flex items-center gap-2 flex-col md:flex-row lg:flex-row xl:flex-row">
+            <ProgressBar value={campaign.progress}  />
             <span>{campaign.progress}%</span>
           </div>
 
-          <div>{campaign.startDate}</div>
+          <div className="text-sm md:text-md lg:text-md">{campaign.startDate}</div>
 
           <div className="flex gap-4">
             <Button className={clsx(buttonColor[campaign.status], "flex items-center gap-1")}>
