@@ -27,9 +27,9 @@ const buttonColor = {
 
 const campaigns: Campaign[] = [
   { name: "Campaign Name 1", status: "Active", progress: 80, startDate: "Apr 16, 2025" },
-  { name: "Campaign Name 1", status: "Pause", progress: 65, startDate: "Apr 15, 2025" },
-  { name: "Campaign Name 1", status: "Active", progress: 70, startDate: "Apr 14, 2025" },
-  { name: "Campaign Name 1", status: "Stop", progress: 85, startDate: "Apr 12, 2025" },
+  { name: "Campaign Name 2", status: "Pause", progress: 65, startDate: "Apr 15, 2025" },
+  { name: "Campaign Name 3", status: "Active", progress: 70, startDate: "Apr 14, 2025" },
+  { name: "Campaign Name 4", status: "Stop", progress: 85, startDate: "Apr 12, 2025" },
 ];
 
 // Custom ProgressBar Component
@@ -62,48 +62,56 @@ const Button = ({
 
 const CampaignTable = () => {
   return (
-    <div className="p-4 rounded-lg  text-white w-full">
+    <div className="p-4 bg-[#1C1C1C] rounded-xl text-white">
       <h2 className="text-xl font-semibold mb-4">Campaign Status</h2>
+      <div className="overflow-auto rounded-lg">
+        <table className="min-w-full text-sm text-left text-[#8D8D8D] border-separate border-spacing-y-2">
+          <thead className="text-xs uppercase bg-[#242424] text-[#8D8D8D] rounded-2xl">
+            <tr>
+              <th className="px-6 py-3 whitespace-nowrap">Campaign Name</th>
+              <th className="px-6 py-3 whitespace-nowrap">Status</th>
+              <th className="px-6 py-3 whitespace-nowrap">Progress %</th>
+              <th className="px-6 py-3 whitespace-nowrap">Start Date</th>
+              <th className="px-6 py-3 whitespace-nowrap">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {campaigns.map((campaign, idx) => (
+              <tr
+                key={idx}
+                className="bg-[#1A1A1A] rounded-xl border-b border-gray-800"
+              >
+                <td className="px-6 py-4 whitespace-nowrap">{campaign.name}</td>
 
-      {/* Table Header */}
-      <div className="grid grid-cols-5 p-3 bg-[#242424] rounded-md font-medium text-sm text-gray-300">
-        <div>Campaign Name</div>
-        <div>Status</div>
-        <div>Progress Percentage</div>
-        <div>Start Date</div>
-        <div>Actions</div>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className={clsx("flex items-center gap-2 w-fit px-2 py-1 rounded-md", statusColor[campaign.status])}>
+                    <span className={clsx("w-2 h-2 rounded-full", statusColor[campaign.status])}></span>
+                    {campaign.status}
+                  </span>
+                </td>
+
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex items-center gap-2 flex-col md:flex-row">
+                    <ProgressBar value={campaign.progress} />
+                    <span>{campaign.progress}%</span>
+                  </div>
+                </td>
+
+                <td className="px-6 py-4 whitespace-nowrap">{campaign.startDate}</td>
+
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex gap-2 flex-wrap">
+                    <Button className={clsx(buttonColor[campaign.status], "flex items-center gap-1")}>
+                      {campaign.status} <ChevronDown size={14} />
+                    </Button>
+                    <Button className="bg-[#63FBEF] text-black">View</Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
-      {/* Campaign Rows */}
-      {campaigns.map((campaign, idx) => (
-        <div
-          key={idx}
-          className="grid grid-cols-5 items-center py-4 px-3 border-b border-gray-800 hover:bg-[#1A1A1A] text-sm md:text-md lg:text-md"
-        >
-          <div>{campaign.name}</div>
-
-          <div className={clsx("flex items-center gap-2 w-18 p-2 pr-2 text-sm md:text-md lg:text-md rounded-md",statusColor[campaign.status])}>
-            <span className={clsx("w-2 h-2 rounded-full", statusColor[campaign.status])}></span>{campaign.status}
-            
-          </div>
-
-          <div className="flex items-center gap-2 flex-col md:flex-row lg:flex-row xl:flex-row">
-            <ProgressBar value={campaign.progress}  />
-            <span>{campaign.progress}%</span>
-          </div>
-
-          <div className="text-sm md:text-md lg:text-md">{campaign.startDate}</div>
-
-          <div className="flex gap-4">
-            <Button className={clsx(buttonColor[campaign.status], "flex items-center gap-1")}>
-              {campaign.status} <ChevronDown size={14} />
-            </Button>
-            <Button className="bg-[#63FBEF] text-black">
-              View Details
-            </Button>
-          </div>
-        </div>
-      ))}
     </div>
   );
 };
