@@ -1,14 +1,36 @@
 'use client'
 import { Button } from "@/component/Button";
 import { Input } from "@/component/Input";
-
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function Signup() {
   const router = useRouter()
-  const SignupHandler = () =>{
-        router.push("/email-verification")
+  const [username, setUsername] = useState('');
+  const [emailId, setEmailId] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const SignupHandler = async () =>{
+    try{
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/signup`,{
+    username,
+        emailId,
+        phone_number,
+        password,
+        confirmPassword
+  });
+  if (response.status === 201) {
+    alert(response.data.message);
+    router.push(`/email-verification?emailId=${encodeURIComponent(emailId)}`)
+  }
+    }catch (error:any) {
+      setError(error.response?.data?.message || 'Something went wrong');
+    }
+        
   }
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen">
@@ -64,19 +86,33 @@ export function Signup() {
           <h2 className="text-[#63FBEF] text-4xl md:text-5xl text-center mb-6 mt-4">Sign Up</h2>
 
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="User Name" logo="/assets/InputIcon/profile.png" />
+            <Input placeholder="User Name" logo="/assets/InputIcon/profile.png"  
+             value={username}
+              onChange={(e) => setUsername(e.target.value)}/>
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Email ID" logo="/assets/InputIcon/message.png" />
+            <Input placeholder="Email ID" logo="/assets/InputIcon/message.png"
+            value={emailId}
+            onChange={(e) => setEmailId(e.target.value)}
+            />
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Phone Number" logo="/assets/InputIcon/phone.png" />
+            <Input placeholder="Phone Number" logo="/assets/InputIcon/phone.png" 
+            value={phone_number}
+            onChange={(e)=>setPhoneNumber(e.target.value)}
+            />
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Password" logo="/assets/InputIcon/lock.png" logo2="/assets/InputIcon/eye.png" />
+            <Input placeholder="Password" logo="/assets/InputIcon/lock.png" logo2="/assets/InputIcon/eye.png" 
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+            />
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Confirm Password" logo="/assets/InputIcon/lock.png" logo2="/assets/InputIcon/eye.png"/>
+            <Input placeholder="Confirm Password" logo="/assets/InputIcon/lock.png" logo2="/assets/InputIcon/eye.png"
+            value={confirmPassword}
+            onChange={(e)=>setConfirmPassword(e.target.value)}
+            />
           </div>
 
           <div className="mb-6 w-full flex justify-center">

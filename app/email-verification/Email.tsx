@@ -1,22 +1,58 @@
-"use client"
+
+
+"use client";
 import { Button } from "@/component/Button";
-import { Input } from "@/component/Input";
 import { OtpInput } from "@/component/OtpInput";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import axios from "axios";
 
 export function Email() {
-  const router = useRouter()
-  const emailHandler = () =>{
-    router.push("/dashboard")
-  }
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const email = searchParams.get("emailId") || "";
+console.log(email)
+  const handleOtpChange = (val: string) => {
+    setOtp(val);
+  };
+
+  const emailHandler = async () => {
+    if (!otp || otp.length < 4) {
+      setError("Please enter a valid OTP.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/verify-otp`, {
+        emailId:email,
+        otp
+      });
+ 
+      if (response.status === 200) {
+        router.push("/dashboard");
+      } else {
+        setError("Invalid OTP. Please try again.");
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Verification failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen">
-      {/* left section start */}
+      {/* left section */}
       <div className="bg-[#0A0A0A] w-full md:w-1/2 flex justify-center items-center p-6 md:p-10">
-       
         <div className="bg-[#27272780] w-full max-w-xl rounded-3xl p-6 flex flex-col items-center z-10 relative overflow-hidden">
-          {/* Star Decorations */}
+          {/* Stars and glow */}
           <div
             className="absolute pointer-events-none"
             style={{
@@ -63,58 +99,37 @@ export function Email() {
             }}
           />
 
-          {/* OTP Form Content */}
           <h2 className="text-[#63FBEF] text-4xl md:text-5xl text-center mb-6 mt-4">
             Email Verification
           </h2>
+          <p className="text-sm text-center mb-8">Enter the OTP sent to your email to proceed.</p>
 
-          <div className="mb-1 w-full flex justify-center">
-            <p className="text-sm">
-              Check your email for the OTP and enter it here to
-            </p>
-          </div>
-          <div className="mb-8 w-full flex justify-center">
-            <p className="text-sm">proceed.</p>
-          </div>
+          <OtpInput value={otp} onChange={handleOtpChange} />
 
-          <div>
-            <OtpInput />
-          </div>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
 
           <div className="mb-6 w-full flex justify-center">
-            <Button text={"Verify and Continue"} onClick={emailHandler}/>
+            <Button text={loading ? "Verifying..." : "Verify and Continue"} onClick={emailHandler}  />
           </div>
 
-          <div>
-            <p className="text-[#63FBEF] mb-6">
-              00:30{" "}
-              <span className="text-sm font-semibold text-white text-center">
-                secs
-              </span>
-            </p>
-          </div>
+          <p className="text-[#63FBEF] mb-6">
+            00:30 <span className="text-sm font-semibold text-white">secs</span>
+          </p>
           <p className="text-sm font-semibold text-white text-center">
             Didn’t receive OTP yet?{" "}
-            <span className="text-[#63FBEF] cursor-pointer hover:underline">
-              Resend
-            </span>
+            <span className="text-[#63FBEF] cursor-pointer hover:underline">Resend</span>
           </p>
         </div>
       </div>
 
-      {/* right section start */}
-
+      {/* right section */}
       <div className="bg-[#1C1C1C] w-full md:w-1/2 relative flex flex-col justify-center items-center text-center p-6 md:p-10 overflow-hidden">
         <h2 className="text-[#63FBEF] text-3xl md:text-5xl mb-6">
           Welcome to AI Calling Agent
         </h2>
         <p className="text-lg md:text-xl font-medium">
-          Access your call queue, scripts, and
+          Access your call queue, scripts, and performance tools—all in one place.
         </p>
-        <p className="text-lg md:text-xl font-medium">
-          performance tools—all in one
-        </p>
-        <p className="text-lg md:text-xl font-medium mb-6">place.</p>
 
         <Image
           src="/assets/authImage/robot1.png"

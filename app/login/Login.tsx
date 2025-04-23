@@ -3,11 +3,31 @@ import { Button } from "@/component/Button";
 import { Input } from "@/component/Input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import { useState } from "react";
+import axios from 'axios';
 export function Login() {
   const router = useRouter()
-  const loginHandler = () =>{
-    router.push("/dashboard")
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const loginHandler = async() =>{
+    try{
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/signin`,{
+            emailId,
+            password,
+            
+      });
+      if (response.status === 200) {
+        const token  = response.data.token
+      localStorage.setItem('token',token)
+        alert(response.data.message);
+        router.push("/dashboard");
+      }
+        }catch (error:any) {
+          setError(error.response?.data?.message || 'Something went wrong');
+        }
+        
   }
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen">
@@ -90,10 +110,10 @@ export function Login() {
           <h2 className="text-[#63FBEF] text-4xl md:text-5xl text-center mb-6 mt-4">Sign Up</h2>
 
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Email" logo="/assets/InputIcon/message.png" />
+            <Input placeholder="Email" logo="/assets/InputIcon/message.png" value={emailId} onChange={(e) => setEmailId(e.target.value)}/>
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Password" logo="/assets/InputIcon/lock.png" />
+            <Input placeholder="Password" logo="/assets/InputIcon/lock.png" value={password} onChange={(e) => setPassword(e.target.value)}/>
           </div>
 
           <div className="mb-4 w-full flex justify-end lg:mr-22">

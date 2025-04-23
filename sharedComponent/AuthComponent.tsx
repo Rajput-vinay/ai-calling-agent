@@ -8,13 +8,25 @@ interface AuthComponentProps {
   para2?: string;
   isForget?: boolean;
   onClick ?: () => void
+  emailId?:string,
+  password?:string,
+  confirmPassword?:string,
+  setConfirmPassword?: (password: string) => void,
+  setPassword?: (password: string) => void,
+  setEmailId?: (emailId: string) => void
 }
 export function AuthComponent({
   title,
   para,
   isForget,
   para2,
-  onClick
+  onClick,
+  password,
+  emailId,
+  confirmPassword,
+  setEmailId,
+  setConfirmPassword,
+  setPassword,
 }: AuthComponentProps) {
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen">
@@ -117,7 +129,10 @@ export function AuthComponent({
 
           {isForget && (
             <div className="mb-10 w-full flex justify-center">
-              <Input placeholder="Email" logo="/assets/InputIcon/message.png" />
+              <Input placeholder="Email" logo="/assets/InputIcon/message.png" 
+              value={emailId || ""}
+              onChange={(e)=> setEmailId?.(e.target.value)} 
+              />
             </div>
           )}
 
@@ -128,6 +143,8 @@ export function AuthComponent({
                   placeholder={"Password"}
                   logo={"/assets/InputIcon/lock.png"}
                   logo2={"/assets/InputIcon/lock.png"}
+                  value={password || ""}
+              onChange={(e)=> setPassword?.(e.target.value)} 
                 />
               </div>
               <div className="mb-4 w-full flex justify-center">
@@ -135,6 +152,8 @@ export function AuthComponent({
                   placeholder={"Confirm Password"}
                   logo={"/assets/InputIcon/lock.png"}
                   logo2={"/assets/InputIcon/lock.png"}
+                  value={confirmPassword || ""}
+              onChange={(e)=> setConfirmPassword?.(e.target.value)} 
                 />
               </div>
             </>

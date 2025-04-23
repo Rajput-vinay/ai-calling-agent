@@ -1,8 +1,10 @@
-import { OTPVerification } from "./OtpVerification";
+import React, { Suspense } from 'react';
+import { OTPVerification } from './OtpVerification';
 
-
-export default function page() {
-    return(
-<OTPVerification />
-    )
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OTPVerification />
+    </Suspense>
+  );
 }

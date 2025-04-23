@@ -1,19 +1,10 @@
-'use client'
-import { AuthComponent } from "@/sharedComponent/AuthComponent";
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+import { ResetPassword } from "./ResetPassword";
 
-export default function page() {
-    const router = useRouter()
-
-    const clickHandler = () =>{
-        router.push("/login")
-    }
+export default function page (){
     return (
-        <AuthComponent
-            title={"Set a New Password"}
-            para={"Set your new password to move forward"}
-            isForget={false}
-            onClick={clickHandler}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+           <ResetPassword />
+        </Suspense>
     )
 }

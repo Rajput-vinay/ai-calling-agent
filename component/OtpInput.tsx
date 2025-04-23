@@ -1,34 +1,42 @@
 "use client";
-import { useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface OtpInputProps {
   length?: number;
+  value: string;
+  onChange?: (value: string) => void;
 }
 
-export function OtpInput({ length = 4 }: OtpInputProps) {
-  const [otp, setOtp] = useState<string[]>(Array(length).fill(""));
+export function OtpInput({ length = 4, value, onChange }: OtpInputProps) {
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
-  const handleChange = (value: string, index: number) => {
-    if (!/^[0-9]?$/.test(value)) return;
+  const handleChange = (val: string, index: number) => {
+    if (!/^[0-9]?$/.test(val)) return;
 
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
+    const newOtp = value.split("");
+    newOtp[index] = val;
+    const joinedOtp = newOtp.join("");
+    onChange?.(joinedOtp);
 
-    if (value && index < length - 1) {
+    if (val && index < length - 1) {
       inputsRef.current[index + 1]?.focus();
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      const newOtp = [...otp];
+    if (e.key === "Backspace" && !value[index] && index > 0) {
+      const newOtp = value.split("");
       newOtp[index - 1] = "";
-      setOtp(newOtp);
+      onChange?.(newOtp.join(""));
       inputsRef.current[index - 1]?.focus();
     }
   };
+
+  useEffect(() => {
+    if (value.length > length) {
+      onChange?.(value.slice(0, length));
+    }
+  }, [value, length, onChange]);
 
   return (
     <div className="flex justify-center gap-4 mb-6">
@@ -38,11 +46,11 @@ export function OtpInput({ length = 4 }: OtpInputProps) {
           <input
             key={i}
             ref={(el) => {
-                inputsRef.current[i] = el;
-              }}
+              inputsRef.current[i] = el;
+            }}
             type="text"
             maxLength={1}
-            value={otp[i]}
+            value={value[i] || ""}
             placeholder="-"
             onChange={(e) => handleChange(e.target.value, i)}
             onKeyDown={(e) => handleKeyDown(e, i)}

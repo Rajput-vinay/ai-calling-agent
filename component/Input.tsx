@@ -2,9 +2,11 @@ interface InputProps {
     placeholder: string;
     logo?: string;
     logo2?:string;
+    value?:string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   }
   
-  export function Input({ logo, placeholder ,logo2}: InputProps) {
+  export function Input({ logo, placeholder ,logo2, value,onChange}: InputProps) {
     return (
       <div className="relative w-full max-w-md">
         {logo && (
@@ -17,6 +19,8 @@ interface InputProps {
         <input
           type="text"
           placeholder={placeholder}
+          value={value}
+          onChange={onChange}
           className={`bg-[#272727] text-[#A3A3A3] w-full h-12 rounded-xl font-medium text-base outline-none pr-4 ${
             logo ? "pl-12" : "pl-4"
           }`}
