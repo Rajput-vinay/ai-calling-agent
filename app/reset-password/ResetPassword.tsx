@@ -3,17 +3,14 @@ import { AuthComponent } from "@/sharedComponent/AuthComponent";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-
+import {toast} from "react-toastify"
 export  function ResetPassword() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [password,setPassword] = useState("")
     const [confirmPassword,setConfirmPassword] = useState("")
-    const [error, setError] = useState("");
     const email = searchParams.get("emailId") || "";
-    // const clickHandler = () =>{
-    //     router.push("/login")
-    // }
+   
 
     const clickHandler = async () =>{
        
@@ -24,13 +21,12 @@ export  function ResetPassword() {
                 confirmPassword
               });
               if (response.status === 200) {
-            
-                alert(response.data.message);
+                toast.success(response.data.message)
                 router.push(`/login`)
                 
               }
                 }catch (error:any) {
-                  setError(error.response?.data?.message || 'Something went wrong');
+                  toast.error(error.response?.data?.message)
                 }
     }
     return (

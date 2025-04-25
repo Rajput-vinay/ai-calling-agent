@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {toast} from "react-toastify"
 
 export function Signup() {
   const router = useRouter()
@@ -13,7 +14,7 @@ export function Signup() {
   const [phone_number, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  
   const SignupHandler = async () =>{
     try{
   const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/signup`,{
@@ -24,11 +25,12 @@ export function Signup() {
         confirmPassword
   });
   if (response.status === 201) {
-    alert(response.data.message);
+    
+    toast.success(response.data.message)
     router.push(`/email-verification?emailId=${encodeURIComponent(emailId)}`)
   }
-    }catch (error:any) {
-      setError(error.response?.data?.message || 'Something went wrong');
+    }catch (error:any) {  
+      toast.error(error.response?.data?.message)
     }
         
   }

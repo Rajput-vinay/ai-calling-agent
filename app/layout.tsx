@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Kantumruy_Pro } from 'next/font/google';
-
+import { ToastContainer } from 'react-toastify';
 const kantumruyPro = Kantumruy_Pro({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${kantumruyPro.variable}`}>
       <body className="font-kantumruy-pro">
+        <ToastContainer />
         {children}
       </body>
     </html>

@@ -9,7 +9,7 @@ interface ButtonProps {
     return (
       <button
         onClick={onClick}
-        className={`w-full max-w-md h-12 rounded-xl bg-[#63FBEF] text-[#0E0E0E] font-semibold text-lg hover:bg-[#4ee0d4] transition-all duration-200 ease-in-out ${className}`}
+        className={`w-full max-w-md h-12 rounded-xl bg-[#63FBEF] hover:bg-[#40eedf] text-[#0E0E0E] font-semibold text-lg transition-all duration-200 ease-in-out ${className} cursor-pointer`}
       >
         {text}
       </button>

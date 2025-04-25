@@ -7,13 +7,12 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import axios from "axios";
-
+import {toast} from "react-toastify"
 export function Email() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const email = searchParams.get("emailId") || "";
 console.log(email)
   const handleOtpChange = (val: string) => {
@@ -22,13 +21,13 @@ console.log(email)
 
   const emailHandler = async () => {
     if (!otp || otp.length < 4) {
-      setError("Please enter a valid OTP.");
+      toast.warning("Please enter a valid OTP.");
       return;
     }
 
     try {
       setLoading(true);
-      setError("");
+     
 
       const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/verify-otp`, {
         emailId:email,
@@ -36,12 +35,14 @@ console.log(email)
       });
  
       if (response.status === 200) {
+        toast.success("OTP verified successfully, redirecting...");
         router.push("/dashboard");
       } else {
-        setError("Invalid OTP. Please try again.");
+        
+        toast.error("Invalid OTP. Please try again.")
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Verification failed");
+      toast.error(err.response?.data?.message)
     } finally {
       setLoading(false);
     }
@@ -105,8 +106,6 @@ console.log(email)
           <p className="text-sm text-center mb-8">Enter the OTP sent to your email to proceed.</p>
 
           <OtpInput value={otp} onChange={handleOtpChange} />
-
-          {error && <p className="text-red-500 mb-4">{error}</p>}
 
           <div className="mb-6 w-full flex justify-center">
             <Button text={loading ? "Verifying..." : "Verify and Continue"} onClick={emailHandler}  />

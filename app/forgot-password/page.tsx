@@ -4,10 +4,10 @@ import { AuthComponent } from "@/sharedComponent/AuthComponent";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from "axios"
+import {toast} from "react-toastify"
 export default function page() {
     const router = useRouter()
     const [emailId,setEmailId] = useState('')
-    const [error, setError] = useState("");
     const clickHandler = async () =>{
        
         try{
@@ -15,13 +15,12 @@ export default function page() {
                     emailId,
               });
               if (response.status === 200) {
-            
-                alert(response.data.message);
+                toast.success(response.data.message)
                 router.push(`/otp-verification?emailId=${encodeURIComponent(emailId)}`)
                 
               }
                 }catch (error:any) {
-                  setError(error.response?.data?.message || 'Something went wrong');
+                  toast.error(error.response?.data?.message)
                 }
     }
 

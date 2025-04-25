@@ -5,12 +5,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from 'axios';
+import {toast} from "react-toastify";
 export function Login() {
   const router = useRouter()
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+
+
   const loginHandler = async() =>{
     try{
       const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/signin`,{
@@ -20,12 +21,12 @@ export function Login() {
       });
       if (response.status === 200) {
         const token  = response.data.token
-      localStorage.setItem('token',token)
-        alert(response.data.message);
+        localStorage.setItem('token',token)
+        toast.success(response.data.message)
         router.push("/dashboard");
       }
         }catch (error:any) {
-          setError(error.response?.data?.message || 'Something went wrong');
+          toast.error(error.response?.data?.message)
         }
         
   }
@@ -107,7 +108,7 @@ export function Login() {
             }}
           />
 
-          <h2 className="text-[#63FBEF] text-4xl md:text-5xl text-center mb-6 mt-4">Sign Up</h2>
+          <h2 className="text-[#63FBEF] text-4xl md:text-5xl text-center mb-6 mt-4">Log In</h2>
 
           <div className="mb-4 w-full flex justify-center">
             <Input placeholder="Email" logo="/assets/InputIcon/message.png" value={emailId} onChange={(e) => setEmailId(e.target.value)}/>
