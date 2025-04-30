@@ -1,17 +1,17 @@
 
-interface CallLogRow {
-    name: string;
-    phone:string;
-    email:string;
-    time:string;
-    connected:string;
-    level:string;
-    meeting:string;
-    bde:string
-  }
+interface Row {
+  name: string
+  phone:string
+  email:string
+  time:string
+  call_status: "Not Called" | "Called" | "Answered"
+  call_sentiment:string
+  meeting_id:string
+  assigned_bde:string
+}
   
   interface CallLogTableProps {
-    rows: CallLogRow[];
+    rows: Row[];
   }
 export default function CallLogTable({ rows }: CallLogTableProps) {
     
@@ -35,16 +35,16 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, idx) => (
+              {rows && rows.map((row, idx) => (
                 <tr key={idx} className="rounded-xl border-b-2 border-white">
                   <td className="px-6 py-3">{row.name}</td>
                   <td className="px-6 py-3 ">{row.phone}</td>
                   <td className="px-6 py-3 ">{row.email}</td>
                   <td className="px-6 py-3 ">{row.time}</td>
-                  <td className="px-6 py-3 ">{row.connected}</td>
-                  <td className="px-6 py-3">{row.level}</td>
-                  <td className="px-6 py-3">{row.meeting}</td>
-                  <td className="px-6 py-3">{row.bde}</td>
+                  <td className="px-6 py-3 ">{row.call_status}</td>
+                  <td className="px-6 py-3">{row.call_sentiment}</td>
+                  <td className="px-6 py-3">{row.meeting_id}</td>
+                  <td className="px-6 py-3">{row.assigned_bde}</td>
                 </tr>
               ))}
             </tbody>

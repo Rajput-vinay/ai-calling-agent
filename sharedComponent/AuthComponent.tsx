@@ -144,7 +144,7 @@ export function AuthComponent({
                   logo={"/assets/InputIcon/lock.png"}
                   logo2={"/assets/InputIcon/lock.png"}
                   value={password || ""}
-              onChange={(e)=> setPassword?.(e.target.value)} 
+                  onChange={(e)=> setPassword?.(e.target.value)} 
                 />
               </div>
               <div className="mb-4 w-full flex justify-center">

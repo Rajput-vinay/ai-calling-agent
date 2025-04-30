@@ -14,7 +14,7 @@ export function Email() {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const email = searchParams.get("emailId") || "";
-console.log(email)
+// console.log(email)
   const handleOtpChange = (val: string) => {
     setOtp(val);
   };

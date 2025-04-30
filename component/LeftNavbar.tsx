@@ -35,7 +35,7 @@ export function LeftNavbar() {
     {
       label: "Campaign Management",
       icon: "/assets/dashboard/compaign.png",
-       routes:"/dashboard/compaign"
+       routes:""
     },
   ];
 

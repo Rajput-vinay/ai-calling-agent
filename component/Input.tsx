@@ -4,9 +4,11 @@ interface InputProps {
     logo2?:string;
     value?:string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    type?: string | "text";
+    onIcon2Click?: () => void;
   }
   
-  export function Input({ logo, placeholder ,logo2, value,onChange}: InputProps) {
+  export function Input({ logo, placeholder ,logo2, value,onChange,type ,onIcon2Click}: InputProps) {
     return (
       <div className="relative w-full max-w-md">
         {logo && (
@@ -17,7 +19,7 @@ interface InputProps {
           />
         )}
         <input
-          type="text"
+          type={type}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
@@ -30,7 +32,8 @@ interface InputProps {
           <img
             src={logo2}
             alt="input icon"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 object-contain"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 object-contain cursor-pointer"
+            onClick={onIcon2Click}
           />
         )}
       </div>

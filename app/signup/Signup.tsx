@@ -14,7 +14,8 @@ export function Signup() {
   const [phone_number, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
+  const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const SignupHandler = async () =>{
     try{
   const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/signup`,{
@@ -105,15 +106,22 @@ export function Signup() {
             />
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Password" logo="/assets/InputIcon/lock.png" logo2="/assets/InputIcon/eye.png" 
+            <Input  placeholder="Password" logo="/assets/InputIcon/lock.png" 
+            logo2={showPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"} 
             value={password}
+            type={showPassword ? "text" : "password"}
             onChange={(e)=>setPassword(e.target.value)}
+            onIcon2Click={() => setShowPassword((prev) => !prev)}
+
             />
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Confirm Password" logo="/assets/InputIcon/lock.png" logo2="/assets/InputIcon/eye.png"
+            <Input  placeholder="Confirm Password" logo="/assets/InputIcon/lock.png" 
+            logo2={showConfirmPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"}
             value={confirmPassword}
             onChange={(e)=>setConfirmPassword(e.target.value)}
+            type={showConfirmPassword ? "text" : "password"}
+            onIcon2Click={() => setShowConfirmPassword((prev) => !prev)}
             />
           </div>
 

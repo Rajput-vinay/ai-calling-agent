@@ -4,60 +4,119 @@ import { Card } from "@/component/Card";
 import { LeftNavbar } from "@/component/LeftNavbar";
 import { RectangleCard } from "@/component/RectangleCard";
 import { UploadPopup } from "@/component/UploadPopup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CampaignUpload } from "@/component/CampaignUpload";
+import axios from "axios";
+import { get } from "http";
 
-export  function Dashboard() {
-  const [modalData, setModalData] = useState<null | { title: string;buttonText: string,date:boolean }>(null);
+interface Campaign {
+  _id:string;
+  compaign_name: string;
+  status: "Active" | "Pause" | "Stop"; 
+  progress: number;
+  s_date: string;
+}
 
+interface overallStatsProps {
+  totalCalls: number;
+  totalCallsYes: number;
+  totalMeetingsScheduled: number;
+  conversionRate: number;
+}
+export function Dashboard() {
+  const [showProspectModal, setShowProspectModal] = useState(false);
+  const [showCampaignModal, setShowCampaignModal] = useState(false);
+  const [data, setData] = useState<Campaign[]>([])
+  const [overallStats,setOverallStats] = useState<overallStatsProps>({
+    totalCalls: 0,
+    totalCallsYes: 0,
+    totalMeetingsScheduled: 0,
+    conversionRate:0,
+  })
+  const getAllCampaign = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/get-all-compaigns`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setData(response.data.campaigns);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  
+
+  const getUserOverallCampaignDetails = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/get-user-overall-details`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setOverallStats(response.data.overallStats);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const refreshDashboardData = () => {
+    getUserOverallCampaignDetails();
+    getAllCampaign();
+  };
+
+  useEffect(() => {
+    refreshDashboardData()
+    
+  },[]);
+  // console.log("data", data);
   const cardData = [
     {
       imageurl: "/assets/dashboard/first.png",
-      num: "432",
+      num: `${overallStats.totalCalls}`,
       desc: "Calls Dialed",
       rgba: "rgba(42, 104, 255, 1)",
     },
     {
       imageurl: "/assets/dashboard/second.png",
-      num: "346",
+      num: `${overallStats.totalCallsYes}`,
       desc: "Calls Answered",
       rgba: "rgba(0, 210, 106, 1)",
     },
     {
       imageurl: "/assets/dashboard/third.png",
-      num: "289",
+      num: `${overallStats.totalMeetingsScheduled}`,
       desc: "Meetings Booked",
       rgba: "rgba(252, 213, 63, 1)",
     },
     {
       imageurl: "/assets/dashboard/fouth.png",
-      num: "80%",
+      num: `${overallStats.conversionRate}%`,
       desc: "Conversion Rate",
       rgba: "rgba(255, 110, 20, 1)",
     },
   ];
 
-  const openProspectModal = () => {
-    setModalData({
-      title: "Upload Prospects",
-      buttonText: "Start to initiate the call drive",
-      date:false
-    });
-  };
-
-  const openCampaignModal = () => {
-    setModalData({
-      title: "Create Campaign",
-      buttonText: "Schedule the call drive",
-      date: true
-    });
-  };
-
-  const closeModal = () => {
-    setModalData(null);
-  };
+  const openProspectModal = () => setShowProspectModal(true);
+  const openCampaignModal = () => setShowCampaignModal(true);
+  const closeProspectModal = () => setShowProspectModal(false);
+  const closeCampaignModal = () => setShowCampaignModal(false);
 
   return (
-    <div >
+    <div>
       <div className="flex-1 ">
         {/* Header */}
         <div className=" pt-2">
@@ -99,19 +158,25 @@ export  function Dashboard() {
 
         {/* Campaign Table */}
         <div className="bg-[#1C1C1C] mt-6 rounded-md p-4 overflow-x-auto">
-          <CampaignTable />
+          <CampaignTable data={data} fetchData={refreshDashboardData}/>
         </div>
       </div>
 
       {/* Upload Modal */}
-      {modalData && (
-        <UploadPopup
-          onClose={closeModal}
-          title={modalData.title}
-          buttonText={modalData.buttonText}
-          date={modalData.date}
-        />
-      )}
+      {showProspectModal && <UploadPopup
+       onClose={() => setShowProspectModal(false)}
+          onSuccess={() => {
+            setShowProspectModal(false);
+            refreshDashboardData();
+          }}/>}
+
+      {/*  create Campaign Modal */}
+      {showCampaignModal && <CampaignUpload 
+      onClose={() => setShowCampaignModal(false)}
+      onSuccess={() => {
+        setShowCampaignModal(false);
+        refreshDashboardData();
+      }} />}
     </div>
   );
 }

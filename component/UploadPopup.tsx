@@ -1,34 +1,45 @@
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import * as XLSX from "xlsx";
+import Papa from 'papaparse'
 import { Input } from "./Input";
 import { Button } from "./Button";
-
+import {toast} from "react-toastify"
+import axios from 'axios'
 interface UploadPopupProps {
   onClose: () => void;
-  title: string;
-  buttonText: string;
-  date: boolean;
+  onSuccess: () => void;
+  
 }
 
 export function UploadPopup({
   onClose,
-  title,
-  buttonText,
-  date,
+  onSuccess
+ 
+ 
 }: UploadPopupProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewData, setPreviewData] = useState<string[][] | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-
+  const [callDriveName, setCallDriveName] = useState("")
+  const [scriptText, setScriptText] = useState("")
+  const [loading, setLoading] = useState(false);
+  // console.log("callDriveName", callDriveName)
+  // console.log("scriptText", scriptText)
+  // console.log("selectedFile", selectedFile)
   const handleFileClick = () => {
     fileInputRef.current?.click();
+   
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if(file.type !== "text/csv"){
+        toast.warning("Please upload a valid CSV file");
+        setSelectedFile(null);
+        return;
+      }
       setSelectedFile(file);
       setPreviewData(null);
       setShowPreview(false);
@@ -40,20 +51,56 @@ export function UploadPopup({
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      const data = new Uint8Array(e.target?.result as ArrayBuffer);
-      const workbook = XLSX.read(data, { type: "array" });
+      if(reader.result){
+        Papa.parse(reader.result as string,{
+          complete:(result: any) =>{
+            setPreviewData(result.data as string[][]);
+            setShowPreview(true);
+          },
 
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const parsedData = XLSX.utils.sheet_to_json(sheet, {
-        header: 1,
-      }) as string[][];
-      setPreviewData(parsedData);
-      setShowPreview(true);
+          header:false,
+          skipEmptyLines: true,
+        })
+      }
+     
     };
 
-    reader.readAsArrayBuffer(selectedFile);
+    reader.readAsText(selectedFile);
   };
+
+  const uploadProspectData = async () =>{
+    if(!selectedFile || !callDriveName || !scriptText){
+      toast.warning("Please fill all field and uplad a file");
+      return;
+    }
+    setLoading(true);
+
+    
+     const formData = new FormData();
+     formData.append("file",selectedFile);
+     formData.append("prospect_name",callDriveName);
+     formData.append("additional_instructions",scriptText);
+     const token = localStorage.getItem("token");
+    // console.log("formData",formData)
+     
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/create-prospect`,formData,{headers:{'Authorization': `Bearer ${token}`}})
+
+      if(response.status === 201){
+        toast.success(response.data.message);
+
+        onSuccess()
+        onClose();
+      }else{
+        toast.error("Upload failed");
+      }
+    } catch (error) {
+      // console.log("upload error",error)
+      toast.error("An error occurred while uploading ")
+    }finally{
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="fixed inset-0 bg-[#0E0E0E80] bg-opacity-60 flex items-center justify-center z-50">
@@ -66,7 +113,7 @@ export function UploadPopup({
 
       <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto scrollbar-hide">
         <h2 className="text-center text-lg font-semibold text-teal-300 mb-6">
-          {title}
+        Upload Prospects
         </h2>
 
         <label className="block text-sm mb-2">Name of the call drive</label>
@@ -74,29 +121,11 @@ export function UploadPopup({
 
              <Input 
               placeholder={"Enter name of the call drive"}
+              value={callDriveName}
+              onChange={(e) => setCallDriveName(e.target.value)}
               />
 
-        {date && (
-          <div className="flex flex-row gap-2 mt-2">
-            <div>
-              <label className="block text-sm mb-2">
-                Start Date
-              </label>
-              <Input 
-              placeholder={"Start Date"}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm mb-2">
-                Start Time
-              </label>
-              <Input 
-              placeholder={"Start Time"}
-              />
-            </div>
-          </div>
-        )}
+       
 
         <label className="block text-sm mb-2 mt-2">Upload Files</label>
 
@@ -115,11 +144,11 @@ export function UploadPopup({
               Upload Files or Drag and drop
             </p>
             <p className="text-xs text-gray-500">
-              (accepts .csv, .xlsx &lt;50MB)
+              (accepts .csv, &lt;50MB)
             </p>
             <input
               type="file"
-              accept=".csv, .xlsx"
+              accept=".csv,"
               ref={fileInputRef}
               className="hidden"
               onChange={handleFileChange}
@@ -204,16 +233,13 @@ export function UploadPopup({
         <label className="block text-sm mb-2">Script</label>
         <Input 
               placeholder={"Enter script"}
+              value={scriptText}
+              onChange={(e)=> setScriptText(e.target.value)}
               />
-
-
-              
-
-       
-
         <Button
-         text={buttonText}
+         text={"Start to initiate the call drive"}
          className="mt-4"
+         onClick={uploadProspectData}
         />
       </div>
     </div>

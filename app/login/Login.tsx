@@ -10,7 +10,7 @@ export function Login() {
   const router = useRouter()
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const loginHandler = async() =>{
     try{
@@ -114,12 +114,16 @@ export function Login() {
             <Input placeholder="Email" logo="/assets/InputIcon/message.png" value={emailId} onChange={(e) => setEmailId(e.target.value)}/>
           </div>
           <div className="mb-4 w-full flex justify-center">
-            <Input placeholder="Password" logo="/assets/InputIcon/lock.png" value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <Input  type={showPassword ? "text" : "password"}
+            placeholder="Password" logo="/assets/InputIcon/lock.png" logo2={showPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"}  
+            onIcon2Click={() => setShowPassword((prev) => !prev)}
+            value={password} onChange={(e) => setPassword(e.target.value)}/>
+            
           </div>
 
           <div className="mb-4 w-full flex justify-end lg:mr-22">
-  <p className="text-sm cursor-pointer hover:underline" onClick={() => router.push("/forgot-password")}>Forgot password?</p>
-</div>
+          <p className="text-sm cursor-pointer hover:underline" onClick={() => router.push("/forgot-password")}>Forgot password?</p>
+          </div>
           
 
           <div className="mb-6 w-full flex justify-center">

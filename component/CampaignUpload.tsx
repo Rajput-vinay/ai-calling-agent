@@ -1,0 +1,171 @@
+'use client'
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
+import { Input } from "./Input";
+import { Button } from "./Button";
+import {toast} from 'react-toastify'
+import axios from "axios"
+interface UploadPopupProps {
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export function CampaignUpload({
+  onClose,
+  onSuccess
+}: UploadPopupProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [callDriveName,setCallDriveName] = useState("")
+  const [date,setDate] = useState("")
+  const [time,setTime] = useState("")
+  const [scriptText,setScriptText] = useState("")
+  const handleFileClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // console.log("date",date)
+  // console.log("time",time)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const uploadCampaignData = async() =>{
+    if(!selectedFile || !callDriveName || !date || !time || !scriptText){
+      toast.warning("Please fill all field and upload a file")
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file",selectedFile)
+    formData.append("compaign_name",callDriveName)
+    formData.append("s_date",date)
+    formData.append("s_time",time)
+    formData.append("additional_instructions",scriptText)
+
+    const token = localStorage.getItem("token");
+
+    try {
+const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/create-compaign`,formData, {
+  headers:{
+    'Authorization':`Bearer ${token}`
+  }
+})
+
+if(response.status === 201){
+  toast.success("campign upload successfully!")
+  onSuccess();
+  onClose();
+}else {
+  toast.error("Failed to upload");
+}
+    }catch(error){
+      console.error("Upload error:", error);
+      toast.error("Something went wrong while uploading.");
+    }
+
+  }
+
+  useEffect(() => {
+    setCallDriveName("");
+    setDate("");
+    setTime("");
+    setScriptText("");
+    setSelectedFile(null);
+  }, []);
+  return (
+    <div className="fixed inset-0 bg-[#0E0E0E80] bg-opacity-60 flex items-center justify-center z-50">
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"
+      >
+        ✕
+      </button>
+
+      <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto scrollbar-hide">
+        <h2 className="text-center text-lg font-semibold text-teal-300 mb-6">
+          Create Campaign
+        </h2>
+
+        <label className="block text-sm mb-2">Name of the call drive</label>
+        <Input placeholder={"Enter name of the call drive"} value={callDriveName} onChange={(e)=>setCallDriveName(e.target.value)}/>
+
+        <div className="flex flex-row gap-2 mt-2">
+          <div>
+            <label className="block text-sm mb-2">Start Date</label>
+            <Input type={"date"} placeholder={"Start Date"} value={date} onChange={(e)=> setDate(e.target.value)}/>
+          </div>
+
+          <div>
+            <label className="block text-sm mb-2">Start Time</label>
+            <Input type={"time"} placeholder={"Start Time"} value={time} onChange={(e)=> setTime(e.target.value)}/>
+          </div>
+        </div>
+
+        <label className="block text-sm mb-2 mt-2">Upload Files</label>
+
+        {!selectedFile && (
+          <div
+            onClick={handleFileClick}
+            className="border border-dashed border-gray-500 p-6 rounded-lg text-center flex flex-col items-center gap-2 mb-4 relative cursor-pointer hover:bg-[#2a2a2a]"
+          >
+            <Image
+              src={"/assets/dashboard/upload.png"}
+              alt="upload"
+              width={32}
+              height={32}
+            />
+            <p className="text-sm text-gray-400">
+              Upload Files or Drag and drop
+            </p>
+            <p className="text-xs text-gray-500">
+              (accepts .csv &lt;50MB)
+            </p>
+            <input
+              type="file"
+              accept=".csv, "
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </div>
+        )}
+
+        {selectedFile && (
+          <div className="bg-[#2a2a2a] p-3 rounded-lg mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Image
+                src={"/assets/dashboard/pdf.png"}
+                alt="pdf"
+                width={22}
+                height={22}
+              />
+              <div>
+                <p className="text-sm">{selectedFile.name}</p>
+                <p className="text-xs text-gray-400">
+                  {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
+                </p>
+              </div>
+            </div>
+            <Image
+              src={"/assets/dashboard/delete.png"}
+              alt="delete"
+              width={22}
+              height={22}
+              className="cursor-pointer"
+              onClick={() => setSelectedFile(null)}
+            />
+          </div>
+        )}
+
+        <label className="block text-sm mb-2">Script</label>
+        <Input placeholder={"Enter script"} value={scriptText} onChange={(e)=>setScriptText(e.target.value)}/>
+
+        <Button text={"Schedule the call drive"} className="mt-4" onClick={uploadCampaignData} />
+      </div>
+    </div>
+  );
+}
