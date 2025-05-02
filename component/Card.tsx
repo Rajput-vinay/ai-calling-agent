@@ -9,7 +9,7 @@ interface CardProps {
 
 export function Card({ imageurl, desc, num, rgba }: CardProps) {
   return (
-    <div className="relative w-full md:w-40 lg:w-60 rounded-[12px] overflow-hidden">
+    <div className="relative w-[90%] md:w-44 lg:w-55 h-48 rounded-[12px] overflow-hidden">
       {/* Circular Gradient Overlay with dynamic rgba */}
       <div
         className="absolute -top-[250px] -right-[200px] w-[400px] h-[400px] z-30 pointer-events-none rounded-full"
@@ -35,7 +35,7 @@ export function Card({ imageurl, desc, num, rgba }: CardProps) {
 
         {/* Text Info */}
         <div>
-          <h2 className="text-2xl font-semibold text-white">{num}</h2>
+          <h2 className="text-3xl font-semibold text-white">{num}</h2>
           <p className="text-sm text-[#A3A3A3]">{desc}</p>
         </div>
       </div>

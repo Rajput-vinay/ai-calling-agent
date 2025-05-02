@@ -14,6 +14,10 @@ interface AuthComponentProps {
   setConfirmPassword?: (password: string) => void,
   setPassword?: (password: string) => void,
   setEmailId?: (emailId: string) => void
+  setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowConfirmPassword?: React.Dispatch<React.SetStateAction<boolean>>;
+  showPassword?: boolean
+  showConfirmPassword?: boolean
 }
 export function AuthComponent({
   title,
@@ -27,6 +31,10 @@ export function AuthComponent({
   setEmailId,
   setConfirmPassword,
   setPassword,
+  showPassword,
+  setShowPassword,
+  showConfirmPassword,
+  setShowConfirmPassword
 }: AuthComponentProps) {
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen">
@@ -141,19 +149,23 @@ export function AuthComponent({
               <div className="mb-4 w-full flex justify-center">
                 <Input
                   placeholder={"Password"}
+                  type={showPassword ? "text" : "password"}
                   logo={"/assets/InputIcon/lock.png"}
-                  logo2={"/assets/InputIcon/lock.png"}
                   value={password || ""}
+                  onIcon2Click={() => setShowPassword?.((prev) => !prev)}
+                  logo2={showPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"} 
                   onChange={(e)=> setPassword?.(e.target.value)} 
                 />
               </div>
               <div className="mb-4 w-full flex justify-center">
                 <Input
                   placeholder={"Confirm Password"}
+                  logo2={showConfirmPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"}
                   logo={"/assets/InputIcon/lock.png"}
-                  logo2={"/assets/InputIcon/lock.png"}
+                  onIcon2Click={() => setShowConfirmPassword?.((prev) => !prev)}
+                  type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword || ""}
-              onChange={(e)=> setConfirmPassword?.(e.target.value)} 
+                  onChange={(e)=> setConfirmPassword?.(e.target.value)} 
                 />
               </div>
             </>

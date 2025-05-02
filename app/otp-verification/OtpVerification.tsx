@@ -5,18 +5,39 @@ import { OtpInput } from "@/component/OtpInput";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {toast} from "react-toastify"
 export function OTPVerification() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
+  const [seconds,setSeconds] = useState(30)
   const email = searchParams.get("emailId") || "";
 
   const handleOtpChange = (val: string) => {
     setOtp(val);
   };
+
+    useEffect(()=>{
+      if(seconds === 0) return;
+      const interval = setInterval(() => setSeconds(prev => prev-1),1000)
+      return () => clearInterval(interval)
+    },[seconds])
+
+      const handleResendOtp = async ()=>{
+        try{
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/resend-otp`,{
+            emailId:email,
+          })
+          if(response.status === 200){
+            toast.success("OTP resent successfully");
+            setSeconds(30);
+          }
+        }catch(err:any){
+          toast.error("Failed to resend OTP")
+        }  
+      }
 
   const clickHandler = async () => {
     if (!otp || otp.length < 4) {
@@ -121,11 +142,11 @@ export function OTPVerification() {
           </div>
 
           <p className="text-[#63FBEF] mb-6">
-            00:30 <span className="text-sm font-semibold text-white">secs</span>
+          {seconds <10 ? `00:0${seconds}` : `00:${seconds }`}<span className="text-sm font-semibold text-white">secs</span>
           </p>
           <p className="text-sm font-semibold text-white text-center">
             Didn’t receive OTP yet?{" "}
-            <span className="text-[#63FBEF] cursor-pointer hover:underline">Resend</span>
+            <span className="text-[#63FBEF] cursor-pointer hover:underline" onClick={handleResendOtp}>Resend</span>
           </p>
         </div>
       </div>

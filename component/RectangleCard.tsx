@@ -16,7 +16,7 @@ interface RectangleCardProps {
     onClick
   }: RectangleCardProps) {
     return (
-      <div className="bg-[#1C1C1C] w-full md:w-[20rem] lg:w-[24rem] xl:w-[33rem] max-w-full mx-auto rounded-xl border-dashed border-[#A3A3A3] border-2">
+      <div className="bg-[#1C1C1C] w-full md:w-[20rem] lg:w-[22rem] xl:w-[33rem] max-w-full rounded-xl border-dashed border-[#A3A3A3] border-2">
         <div className="flex flex-col items-center justify-center p-6 sm:p-5" onClick={onClick}>
           <img
             src={imageurl}

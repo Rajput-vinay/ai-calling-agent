@@ -5,19 +5,27 @@ import { Button } from "@/component/Button";
 import { OtpInput } from "@/component/OtpInput";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {toast} from "react-toastify"
 export function Email() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [otp, setOtp] = useState("");
+  const [seconds,setSeconds] = useState(30)
   const [loading, setLoading] = useState(false);
   const email = searchParams.get("emailId") || "";
+
 // console.log(email)
   const handleOtpChange = (val: string) => {
     setOtp(val);
   };
+
+  useEffect(()=>{
+    if(seconds === 0) return;
+    const interval = setInterval(() => setSeconds(prev => prev-1),1000)
+    return () => clearInterval(interval)
+  },[seconds])
 
   const emailHandler = async () => {
     if (!otp || otp.length < 4) {
@@ -47,6 +55,20 @@ export function Email() {
       setLoading(false);
     }
   };
+
+  const handleResendOtp = async ()=>{
+    try{
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/user/resend-otp`,{
+        emailId:email,
+      })
+      if(response.status === 200){
+        toast.success("OTP resent successfully");
+        setSeconds(30);
+      }
+    }catch(err:any){
+      toast.error("Failed to resend OTP")
+    }  
+  }
 
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen">
@@ -112,11 +134,11 @@ export function Email() {
           </div>
 
           <p className="text-[#63FBEF] mb-6">
-            00:30 <span className="text-sm font-semibold text-white">secs</span>
+          {seconds <10 ? `00:0${seconds}` : `00:${seconds }`} <span className="text-sm font-semibold text-white">secs</span>
           </p>
           <p className="text-sm font-semibold text-white text-center">
             Didn’t receive OTP yet?{" "}
-            <span className="text-[#63FBEF] cursor-pointer hover:underline">Resend</span>
+            <span className="text-[#63FBEF] cursor-pointer hover:underline" onClick={handleResendOtp}>Resend</span>
           </p>
         </div>
       </div>

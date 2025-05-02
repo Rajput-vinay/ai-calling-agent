@@ -103,6 +103,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
             <Input placeholder="Phone Number" logo="/assets/InputIcon/phone.png" 
             value={phone_number}
             onChange={(e)=>setPhoneNumber(e.target.value)}
+            type="tel"
             />
           </div>
           <div className="mb-4 w-full flex justify-center">

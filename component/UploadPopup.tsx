@@ -24,9 +24,7 @@ export function UploadPopup({
   const [callDriveName, setCallDriveName] = useState("")
   const [scriptText, setScriptText] = useState("")
   const [loading, setLoading] = useState(false);
-  // console.log("callDriveName", callDriveName)
-  // console.log("scriptText", scriptText)
-  // console.log("selectedFile", selectedFile)
+
   const handleFileClick = () => {
     fileInputRef.current?.click();
    
@@ -111,7 +109,7 @@ export function UploadPopup({
         ✕
       </button>
 
-      <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto scrollbar-hide">
+      <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto no-scrollbar">
         <h2 className="text-center text-lg font-semibold text-teal-300 mb-6">
         Upload Prospects
         </h2>
@@ -129,7 +127,7 @@ export function UploadPopup({
 
         <label className="block text-sm mb-2 mt-2">Upload Files</label>
 
-        {!showPreview && (
+        {!selectedFile && (
           <div
             onClick={handleFileClick}
             className="border border-dashed border-gray-500 p-6 rounded-lg text-center flex flex-col items-center gap-2 mb-4 relative cursor-pointer hover:bg-[#2a2a2a]"
@@ -199,7 +197,7 @@ export function UploadPopup({
         )}
 
         {showPreview && previewData && (
-          <div className="bg-[#2a2a2a] p-4 rounded-lg max-h-60 overflow-y-auto text-sm mb-4 scrollbar-hide">
+          <div className="bg-[#2a2a2a] p-4 rounded-lg max-h-60 overflow-y-auto text-sm mb-4 no-scrollbar">
             <table className="w-full table-auto text-left">
               <thead className="text-teal-400">
                 <tr>
@@ -245,3 +243,4 @@ export function UploadPopup({
     </div>
   );
 }
+

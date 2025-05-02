@@ -9,6 +9,8 @@ export  function ResetPassword() {
     const searchParams = useSearchParams()
     const [password,setPassword] = useState("")
     const [confirmPassword,setConfirmPassword] = useState("")
+      const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const email = searchParams.get("emailId") || "";
    
 
@@ -40,6 +42,10 @@ export  function ResetPassword() {
             confirmPassword={confirmPassword}
             setConfirmPassword={setConfirmPassword}
             setPassword={setPassword}
+            showPassword={showPassword}
+            showConfirmPassword={showConfirmPassword}
+            setShowPassword={setShowPassword}
+            setShowConfirmPassword={setShowConfirmPassword}
         />
        
     )
