@@ -122,7 +122,7 @@ export default async function page ({ params }:Params) {
           {/* <h1 className="text-2xl font-semibold">{`< Dashboard > Compaign Name`} </h1> */}
 
           <h1 className="text-2xl font-semibold">
-  &lt; <Link href="/dashboard" className="text-2xl font-semibold cursor-pointer hover:text-[#63FBEF]  ">Dashboard</Link> &gt; Compaign Name
+  &lt; <Link href="/dashboard" className="text-2xl font-semibold cursor-pointer hover:text-[#63FBEF]  ">Dashboard</Link> &gt; Compaign 
 </h1>
         </div>
         {rows.length === 0 ? (

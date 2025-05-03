@@ -102,7 +102,7 @@ export function Dashboard() {
     }
   };
 
-  console.log("overall stats",overallStats)
+  // console.log("overall stats",overallStats)
   const refreshDashboardData = () => {
     getUserOverallCampaignDetails();
     getAllCampaign();
@@ -147,7 +147,7 @@ export function Dashboard() {
   const closeCampaignModal = () => setShowCampaignModal(false);
 
   return (
-    <div className="ml-6">
+    <div className="">
       <div className="flex-1 ">
         {/* Header */}
         <div className=" pt-2">
@@ -177,7 +177,7 @@ export function Dashboard() {
         {/* Stat Cards */}
      <div className="flex flex-wrap gap-4 mt-6">
   {cardData.map((item, idx) => (
-    <div className="flex-1 min-w-[200px] sm:min-w-[calc(25%-16px)] xl:min-w-[calc(25%-16px)] gap-4 flex-wrap" key={idx}>
+    <div className="flex-1 min-w-[200px] sm:w-[calc(25%-1rem)]" key={idx}>
       <Card
         imageurl={item.imageurl}
         num={item.num}
@@ -211,7 +211,7 @@ export function Dashboard() {
         </div>
 
         {/* Campaign Table */}
-        <div className="bg-[#1C1C1C] mt-6 rounded-2xl p-4 overflow-x-auto lg:mr-14">
+        <div className="bg-[#1C1C1C] mt-6 rounded-2xl p-4 overflow-x-auto">
           <CampaignTable 
           data={viewType === "campaign" ? campaignData : prospectData}
            fetchData={refreshDashboardData}

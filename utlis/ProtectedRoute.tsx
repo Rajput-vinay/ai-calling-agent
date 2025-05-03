@@ -10,6 +10,8 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/login');
+    }else{
+      router.push('/dashboard');
     }
   }, []);
 

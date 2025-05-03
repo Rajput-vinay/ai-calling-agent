@@ -61,8 +61,15 @@ export function LeftNavbar() {
           }
         `}
       >
-        <div className="flex items-center justify-center pt-6">
-          <h1 className="text-[#63FBEF] text-2xl font-bold">AI Calling Agent</h1>
+        <div className="flex items-center justify-center pt-6 gap-2">
+          <Image
+          src={"/assets/dashboard/logo.png"}
+          alt="Logo"
+          height={20}
+          width={20}
+          />
+          <h1 className="text-[#63FBEF] text-2xl font-bold">
+            AI Calling Agent</h1>
         </div>
 
         <nav className="mt-12 flex flex-col gap-2 px-4">

@@ -42,7 +42,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
   return (
     <div className="p-6 bg-[#1C1C1C] rounded-4xl">
       <div className="overflow-auto rounded-lg shadow">
-        <table className="w-full text-sm text-left text-[#8D8D8D] border-separate border-spacing-y-2">
+        <table className="w-full text-sm text-left text-[#8D8D8D] border-b-2 border-[#303030]">
           <thead className="text-xs uppercase text-[#8D8D8D] bg-[#242424] rounded-2xl">
             <tr>
               <th className="px-6 py-3">Name</th>
@@ -50,7 +50,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
               <th className="px-6 py-3">Email Id</th>
               <th className="px-6 py-3">Dialed at (time)</th>
               <th className="px-6 py-3">Call Connected</th>
-              <th className="px-6 py-3">Potential Level</th>
+              <th className="px-6 py-3">Sentiment</th>
               <th className="px-6 py-3">Meeting Scheduled</th>
               <th className="px-6 py-3">Download Transcript</th>
             </tr>
@@ -58,7 +58,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
           <tbody>
             {paginatedData &&
               paginatedData.map((row, idx) => (
-                <tr key={idx} className="rounded-xl border-b-2 border-white">
+                <tr key={idx} className="rounded-xl border-b-2 border-[#303030]">
                   <td className="px-6 py-3">{row.name}</td>
                   <td className="px-6 py-3">{row.phone}</td>
                   <td className="px-6 py-3">{row.email}</td>

@@ -1,11 +1,12 @@
 'use client'
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import { Input } from "./Input";
+
 import { Button } from "./Button";
 import {toast} from 'react-toastify'
 import axios from "axios"
 import Papa from 'papaparse'
+import { Input2 } from "./Input2";
 interface UploadPopupProps {
   onClose: () => void;
   onSuccess: () => void;
@@ -23,6 +24,13 @@ export function CampaignUpload({
   const [date,setDate] = useState("")
   const [time,setTime] = useState("")
   const [scriptText,setScriptText] = useState("")
+  const [timeZone,setTimeZone] = useState("")
+
+  useEffect(() =>{
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // console.log("timeZone",timeZone)
+    setTimeZone(timeZone)
+  })
   const handleFileClick = () => {
     fileInputRef.current?.click();
   };
@@ -74,6 +82,7 @@ export function CampaignUpload({
     formData.append("s_date",date)
     formData.append("s_time",time)
     formData.append("additional_instructions",scriptText)
+    formData.append("time_zone",timeZone)
 
     const token = localStorage.getItem("token");
 
@@ -105,32 +114,36 @@ if(response.status === 201){
     setScriptText("");
     setSelectedFile(null);
   }, []);
+
+  
   return (
     <div className="fixed inset-0 bg-[#0E0E0E80] bg-opacity-60 flex items-center justify-center z-50 ">
+      
+
+      <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto no-scrollbar">
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"
+        className="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer"
       >
         ✕
       </button>
 
-      <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto no-scrollbar">
         <h2 className="text-center text-lg font-semibold text-teal-300 mb-6">
           Create Campaign
         </h2>
 
         <label className="block text-sm mb-2">Name of the call drive</label>
-        <Input placeholder={"Enter name of the call drive"} value={callDriveName} onChange={(e)=>setCallDriveName(e.target.value)}/>
+        <Input2 placeholder={"Enter name of the call drive"} value={callDriveName} onChange={(e)=>setCallDriveName(e.target.value)}/>
 
         <div className="flex flex-row gap-2 mt-2">
           <div>
             <label className="block text-sm mb-2">Start Date</label>
-            <Input type={"date"} placeholder={"Start Date"} value={date} onChange={(e)=> setDate(e.target.value)}/>
+            <Input2 type={"date"} placeholder={"Start Date"} value={date} onChange={(e)=> setDate(e.target.value)}/>
           </div>
 
           <div>
             <label className="block text-sm mb-2">Start Time</label>
-            <Input type={"time"} placeholder={"Start Time"} value={time} onChange={(e)=> setTime(e.target.value)}/>
+            <Input2 type={"time"} placeholder={"Start Time"} value={time} onChange={(e)=> setTime(e.target.value)}/>
           </div>
         </div>
 
@@ -238,9 +251,9 @@ if(response.status === 201){
                )}
 
         <label className="block text-sm mb-2">Script</label>
-        <Input placeholder={"Enter script"} value={scriptText} onChange={(e)=>setScriptText(e.target.value)}/>
+        <Input2 placeholder={"Enter script"} value={scriptText} onChange={(e)=>setScriptText(e.target.value)}/>
 
-        <Button text={"Schedule the call drive"} className="mt-4" onClick={uploadCampaignData} />
+        <Button text={"Schedule the call drive"} className="mt-4 max-w-lg" onClick={uploadCampaignData} />
       </div>
     </div>
   );

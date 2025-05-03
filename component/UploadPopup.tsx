@@ -1,10 +1,11 @@
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 import Papa from 'papaparse'
-import { Input } from "./Input";
+
 import { Button } from "./Button";
 import {toast} from "react-toastify"
 import axios from 'axios'
+import { Input2 } from "./Input2";
 interface UploadPopupProps {
   onClose: () => void;
   onSuccess: () => void;
@@ -101,36 +102,40 @@ export function UploadPopup({
   }
 
   return (
-    <div className="fixed inset-0 bg-[#0E0E0E80] bg-opacity-60 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-[#0E0E0E80] bg-opacity-60 flex items-center justify-center z-50 ">
+      
+
+      <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto no-scrollbar ">
+
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-gray-400 hover:text-white text-lg"
+        className="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer"
       >
         ✕
       </button>
-
-      <div className="bg-[#1c1c1c] p-8 rounded-2xl w-[400px] md:w-[550px] lg:w-[550px] max-w-full text-white shadow-lg relative max-h-[90vh] overflow-y-auto no-scrollbar">
         <h2 className="text-center text-lg font-semibold text-teal-300 mb-6">
         Upload Prospects
         </h2>
 
+
         <label className="block text-sm mb-2">Name of the call drive</label>
        
 
-             <Input 
+             <Input2
               placeholder={"Enter name of the call drive"}
               value={callDriveName}
               onChange={(e) => setCallDriveName(e.target.value)}
+              
               />
 
-       
+
 
         <label className="block text-sm mb-2 mt-2">Upload Files</label>
 
         {!selectedFile && (
           <div
             onClick={handleFileClick}
-            className="border border-dashed border-gray-500 p-6 rounded-lg text-center flex flex-col items-center gap-2 mb-4 relative cursor-pointer hover:bg-[#2a2a2a]"
+            className="border border-dashed border-gray-500 p-6 rounded-lg text-center flex flex-col items-center gap-2 mb-4 relative cursor-pointer hover:bg-[#2a2a2a]  "
           >
             <Image
               src={"/assets/dashboard/upload.png"}
@@ -156,7 +161,7 @@ export function UploadPopup({
 
         {selectedFile && (
           <>
-            <div className="bg-[#2a2a2a] p-3 rounded-lg mb-4 flex items-center justify-between">
+            <div className=" bg-[#2a2a2a] p-3 rounded-lg mb-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Image
                   src={"/assets/dashboard/pdf.png"}
@@ -197,7 +202,7 @@ export function UploadPopup({
         )}
 
         {showPreview && previewData && (
-          <div className="bg-[#2a2a2a] p-4 rounded-lg max-h-60 overflow-y-auto text-sm mb-4 no-scrollbar">
+          <div className=" bg-[#2a2a2a] p-4 rounded-lg max-h-60 overflow-y-auto text-sm mb-4 no-scrollbar">
             <table className="w-full table-auto text-left">
               <thead className="text-teal-400">
                 <tr>
@@ -229,14 +234,14 @@ export function UploadPopup({
         )}
 
         <label className="block text-sm mb-2">Script</label>
-        <Input 
+        <Input2 
               placeholder={"Enter script"}
               value={scriptText}
               onChange={(e)=> setScriptText(e.target.value)}
               />
         <Button
          text={"Start to initiate the call drive"}
-         className="mt-4"
+         className="mt-4 max-w-lg "
          onClick={uploadProspectData}
         />
       </div>

@@ -1,3 +1,6 @@
+
+
+
 import Image from "next/image";
 
 interface CardProps {
@@ -9,7 +12,7 @@ interface CardProps {
 
 export function Card({ imageurl, desc, num, rgba }: CardProps) {
   return (
-    <div className="relative w-[90%] md:w-44 lg:w-55 h-48 rounded-[12px] overflow-hidden">
+    <div className="relative w-full h-48 rounded-[12px] overflow-hidden">
       {/* Circular Gradient Overlay with dynamic rgba */}
       <div
         className="absolute -top-[250px] -right-[200px] w-[400px] h-[400px] z-30 pointer-events-none rounded-full"

@@ -28,7 +28,9 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   if (response.status === 201) {
     
     toast.success(response.data.message)
-    router.push(`/email-verification?emailId=${encodeURIComponent(emailId)}`)
+    // router.push(`/email-verification?emailId=${encodeURIComponent(emailId)}`)
+    localStorage.setItem('token',response.data.token)
+    router.push('/dashboard')
   }
     }catch (error:any) {  
       toast.error(error.response?.data?.message)

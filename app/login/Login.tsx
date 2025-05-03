@@ -42,13 +42,13 @@ export function Login() {
         <Image
           src="/assets/authImage/robot2.png"
           alt="robot"
-          width={240}
-          height={180}
+          width={220}
+          height={140}
           className="mx-auto z-10"
         />
 
         <div
-          className="absolute bottom-0 left-0 right-0 h-36 z-0 pointer-events-none -ml-64"
+          className="absolute bottom-0 left-0 right-0 z-0 pointer-events-none -ml-96 h-40"
           style={{
             backgroundImage: `url('/assets/authImage/Rectangle.png')`,
             backgroundRepeat: "no-repeat",

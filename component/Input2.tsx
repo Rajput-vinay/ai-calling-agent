@@ -9,9 +9,9 @@ interface InputProps {
     
   }
   
-  export function Input({ logo, placeholder ,logo2, value,onChange,type ,onIcon2Click}: InputProps) {
+  export function Input2({ logo, placeholder ,logo2, value,onChange,type ,onIcon2Click}: InputProps) {
     return (
-      <div className="relative w-full max-w-md">
+      <div className="relative w-full max-w-lg">
         {logo && (
           <img
             src={logo}

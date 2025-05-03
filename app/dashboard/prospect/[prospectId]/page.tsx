@@ -65,67 +65,14 @@ export default async function page ({ params }:Params) {
     rows = [] 
   }
 
-
-  
-    // const rows = [
-    //     {
-    //       name: "Emily Carter",
-    //       phone: "(416) 555–2387",
-    //       email: "emily.carter@example.com",
-    //       time: "06:30 PM",
-    //       connected: "Yes",
-    //       level: "No",
-    //       meeting: "Yes",
-    //       bde: "Sofia Nguyen"
-    //     },
-    //     {
-    //       name: "Emily Carter",
-    //       phone: "(416) 555–2387",
-    //       email: "emily.carter@example.com",
-    //       time: "06:30 PM",
-    //       connected: "Yes",
-    //       level: "No",
-    //       meeting: "Yes",
-    //       bde: "NA"
-    //     },
-    //     {
-    //       name: "Emily Carter",
-    //       phone: "(416) 555–2387",
-    //       email: "emily.carter@example.com",
-    //       time: "06:30 PM",
-    //       connected: "Yes",
-    //       level: "Yes",
-    //       meeting: "Yes",
-    //       bde: "Sofia Nguyen"
-    //     },
-    //     {
-    //       name: "Emily Carter",
-    //       phone: "(416) 555–2387",
-    //       email: "emily.carter@example.com",
-    //       time: "06:30 PM",
-    //       connected: "No",
-    //       level: "No",
-    //       meeting: "No",
-    //       bde: "NA"
-    //     },
-    //     {
-    //       name: "Emily Carter",
-    //       phone: "(416) 555–2387",
-    //       email: "emily.carter@example.com",
-    //       time: "06:30 PM",
-    //       connected: "Yes",
-    //       level: "-",
-    //       meeting: "-",
-    //       bde: "-"
-    //     },
-    // ]
+  // console.log("rows", rows)
     return (
       <>
         <div className="pt-6 md:pt-2 mb-2">
           {/* <h1 className="text-2xl font-semibold">{`< Dashboard > Prospect Name`} </h1> */}
 
           <h1 className="text-2xl font-semibold">
-  &lt; <Link href="/dashboard" className="text-2xl font-semibold cursor-pointer hover:text-[#63FBEF]  ">Dashboard</Link> &gt; Prospect Name
+  &lt; <Link href="/dashboard" className="text-2xl font-semibold cursor-pointer hover:text-[#63FBEF]  ">Dashboard</Link> &gt; Prospect
 </h1>
         </div>
         {rows.length === 0 ? (

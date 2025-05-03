@@ -83,7 +83,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
     setCampaigns(data);
     setCurrentPage(1);
   },[data])
-  console.log("campaigns", campaigns);
+  // console.log("campaigns", campaigns);
   const updateCampaignStatus = async (
     campaignId: string,
     newStatus: StatusType
@@ -116,7 +116,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
         {type} Status
       </h2>
       <div className="overflow-auto rounded-lg">
-        <table className="min-w-full text-sm text-left text-[#8D8D8D] border-separate border-spacing-y-2">
+        <table className="min-w-full text-sm text-left text-[#8D8D8D] border-b-2 border-[#303030]">
           <thead className="text-xs uppercase bg-[#242424] text-[#8D8D8D] rounded-2xl">
             <tr className="py-3">
               <th className="px-6 py-3 whitespace-nowrap">
@@ -134,7 +134,7 @@ const CampaignTable: React.FC<CampaignTableProps> = ({
             {paginatedData.map((item) => (
               <tr
                 key={item._id}
-                className="bg-[#1A1A1A] rounded-xl border-b border-gray-800"
+                className="bg-[#1A1A1A] rounded-xl border-b-2 border-[#303030]"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   {type === "campaign"

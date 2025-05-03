@@ -1,6 +1,6 @@
 
 
-import ProtectedLayout from "@/component/ProtectedRoute";
+import ProtectedLayout from "@/utlis/ProtectedRoute";
 import { Dashboard } from "./Dashboard";
 
 export default function page (){
