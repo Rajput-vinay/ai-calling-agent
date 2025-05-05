@@ -26,6 +26,7 @@ interface CallLogTableProps {
 }
 
 export default function CallLogTable({ rows }: CallLogTableProps) {
+  
   const [rowData, setRowData] = useState(rows);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -34,6 +35,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  console.log("row",rows)
   useEffect(() => {
     setRowData(rows);
     setCurrentPage(1);
