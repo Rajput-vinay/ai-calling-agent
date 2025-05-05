@@ -80,13 +80,15 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                       : "-"}
                   </td>
 
-                  <td className="px-6 py-3">
+                  {/* <td className="px-6 py-3">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
                           <div key={index}>{call.call_status || "-"}</div>
                         ))
                       : "-"}
-                  </td>
+                  </td> */}
+
+<td className="px-6 py-3">{row.call_status}</td>
                   <td className="px-6 py-3">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
