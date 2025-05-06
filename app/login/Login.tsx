@@ -115,7 +115,7 @@ export function Login() {
           </div>
           <div className="mb-4 w-full flex justify-center">
             <Input  type={showPassword ? "text" : "password"}
-            placeholder="Password" logo="/assets/InputIcon/lock.png" logo2={showPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"}  
+            placeholder="Password" logo="/assets/InputIcon/lock.png" logo2={showPassword ? "/assets/InputIcon/eyeClose.png" : "/assets/InputIcon/eyeOpen.png"}  
             onIcon2Click={() => setShowPassword((prev) => !prev)}
             value={password} onChange={(e) => setPassword(e.target.value)}/>
             

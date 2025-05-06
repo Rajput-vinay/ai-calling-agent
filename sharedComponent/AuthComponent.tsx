@@ -153,14 +153,14 @@ export function AuthComponent({
                   logo={"/assets/InputIcon/lock.png"}
                   value={password || ""}
                   onIcon2Click={() => setShowPassword?.((prev) => !prev)}
-                  logo2={showPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"} 
+                  logo2={showPassword ? "/assets/InputIcon/eyeClose.png" : "/assets/InputIcon/eyeOpen.png"} 
                   onChange={(e)=> setPassword?.(e.target.value)} 
                 />
               </div>
               <div className="mb-4 w-full flex justify-center">
                 <Input
                   placeholder={"Confirm Password"}
-                  logo2={showConfirmPassword ? "/assets/InputIcon/eye2.png" : "/assets/InputIcon/eye.png"}
+                  logo2={showConfirmPassword ? "/assets/InputIcon/eyeClose.png" : "/assets/InputIcon/eyeOpen.png"}
                   logo={"/assets/InputIcon/lock.png"}
                   onIcon2Click={() => setShowConfirmPassword?.((prev) => !prev)}
                   type={showConfirmPassword ? "text" : "password"}
