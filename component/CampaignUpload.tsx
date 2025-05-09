@@ -25,6 +25,30 @@ export function CampaignUpload({
   const [time,setTime] = useState("")
   const [scriptText,setScriptText] = useState("")
   const [timeZone,setTimeZone] = useState("")
+  const [promptList, setPromptList] = useState<{ _id: string, prompt_name: string, required_fields: string }[]>([]);
+  const [selectedPrompt, setSelectedPrompt] = useState("");
+ const [missingFields, setMissingFields] = useState<string[]>([]);
+
+
+
+
+const fetchPrompts = async () => {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/prompt/get-all-prompts`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    }
+    });
+
+    setPromptList(response.data.prompts);
+  } catch (error) {
+    toast.error("Failed to fetch prompts.");
+  }
+}
+
+useEffect(() =>{
+  fetchPrompts();
+},[])
 
   useEffect(() =>{
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -35,19 +59,69 @@ export function CampaignUpload({
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-     const file = e.target.files?.[0];
-     if (file) {
-       if(file.type !== "text/csv"){
-         toast.warning("Please upload a valid CSV file");
-         setSelectedFile(null);
-         return;
-       }
-       setSelectedFile(file);
-       setPreviewData(null);
-       setShowPreview(false);
-     }
-   };
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type !== "text/csv") {
+        toast.warning("Please upload a valid CSV file");
+        setSelectedFile(null);
+        return;
+      }
+  
+      const selectedPromptObj = promptList.find(
+        (p) => p._id === selectedPrompt
+      );
+      if (!selectedPromptObj) {
+        toast.warning("Please select a prompt before uploading a file.");
+        return;
+      }
+  
+      let requiredFields: string[] = [];
+      
+      // Assuming required_fields is an array
+      if (Array.isArray(selectedPromptObj.required_fields)) {
+        requiredFields = selectedPromptObj.required_fields.map((field) =>
+          field.trim().toLowerCase()
+        );
+      } else {
+        // Handle unexpected format
+        toast.error("Invalid required_fields format");
+        return;
+      }
+  
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result: any) => {
+          const headers: string[] = result.meta.fields.map((field: string) =>
+            field.trim().toLowerCase()
+          );
+  
+          const missingFields = requiredFields.filter(
+            (field) => !headers.includes(field)
+          );
+  
+          if (missingFields.length > 0) {
+            setMissingFields(missingFields); // Set missing fields for display
+            toast.error(
+              `Missing required fields in CSV: ${missingFields.join(", ")}`
+            );
+            setSelectedFile(null);
+            return;
+          }
+  
+          setMissingFields([]); // Clear missing fields if all required columns are present
+          setSelectedFile(file);
+          setPreviewData(null);
+          setShowPreview(false);
+        },
+        error: (error) => {
+          toast.error("Error parsing the CSV file");
+          console.error(error);
+        },
+      });
+    }
+  };
  
    const handlePreview = async () => {
      if (!selectedFile) return;
@@ -71,7 +145,7 @@ export function CampaignUpload({
      reader.readAsText(selectedFile);
    };
   const uploadCampaignData = async() =>{
-    if(!selectedFile || !callDriveName || !date || !time || !scriptText){
+    if(!selectedFile || !callDriveName || !date || !time ){
       toast.warning("Please fill all field and upload a file")
       return;
     }
@@ -83,6 +157,7 @@ export function CampaignUpload({
     formData.append("s_time",time)
     formData.append("additional_instructions",scriptText)
     formData.append("time_zone",timeZone)
+    formData.append("prompt_id",selectedPrompt);
 
     const token = localStorage.getItem("token");
 
@@ -183,6 +258,23 @@ if(response.status === 201){
         <label className="block text-sm mb-2">Name of the call drive</label>
         <Input2 placeholder={"Enter name of the call drive"} value={callDriveName} onChange={(e)=>setCallDriveName(e.target.value)}/>
 
+        {promptList.length > 0 && (
+          <div className="mb-2 mt-2">
+            <label className="block text-sm mb-2">Choose Prompt</label>
+            <select
+              value={selectedPrompt}
+              onChange={(e) => setSelectedPrompt(e.target.value)}
+              className="w-full bg-[#2a2a2a] text-white p-2 rounded-lg border border-gray-600"
+            >
+              <option value="">Select a prompt</option>
+              {promptList.map((prompt) => (
+                <option key={prompt._id} value={prompt._id}>
+                  {prompt.prompt_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div className="flex flex-row gap-2 mt-2">
           <div>
             <label className="block text-sm mb-2">Start Date</label>
@@ -338,8 +430,12 @@ if(response.status === 201){
               </div>
                )}
 
-        <label className="block text-sm mb-2">Script</label>
-        <Input2 placeholder={"Enter script"} value={scriptText} onChange={(e)=>setScriptText(e.target.value)}/>
+        {/* <label className="block text-sm mb-2">Script</label>
+        <Input2 placeholder={"Enter script"} value={scriptText} onChange={(e)=>setScriptText(e.target.value)}/> */}
+
+
+      
+
 
         <Button text={"Schedule the call drive"} className="mt-4 max-w-lg" onClick={uploadCampaignData} />
       </div>

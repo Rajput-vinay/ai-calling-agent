@@ -141,6 +141,10 @@ export function Dashboard() {
     },
   ];
 
+  const signOut = () =>{
+    localStorage.removeItem('token')
+    window.location.reload()
+  }
   const openProspectModal = () => setShowProspectModal(true);
   const openCampaignModal = () => setShowCampaignModal(true);
   const closeProspectModal = () => setShowProspectModal(false);
@@ -150,8 +154,13 @@ export function Dashboard() {
     <div className="">
       <div className="flex-1 ">
         {/* Header */}
-        <div className=" pt-2">
+        <div className=" pt-2 flex justify-between">
+          <div>
           <h1 className="text-2xl font-semibold">Dashboard</h1>
+          </div>
+          <div>
+          <button onClick={() => signOut()} className="bg-[#63FBEF] hover:bg-[#40eedf] text-black cursor-pointer text-lg transition-all duration-200 ease-in-out rounded-xl px-3 py-1">Logout</button>
+          </div>
         </div>
 
         {/* Rectangle Cards */}
