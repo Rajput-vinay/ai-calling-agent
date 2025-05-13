@@ -12,10 +12,17 @@ interface Call {
   call_transcript: string;
 }
 
-interface Row {
+interface additional_fields {
   name: string;
   phone: string;
   email: string;
+  website_url: string;
+  google_rating: string;
+  facebook_rating: string;
+  instagram_followers: string;
+}
+interface Row {
+  additional_fields: additional_fields;
   time: string;
   call_status: "Not Called" | "Called" | "Answered";
   calls: Call[];
@@ -26,7 +33,6 @@ interface CallLogTableProps {
 }
 
 export default function CallLogTable({ rows }: CallLogTableProps) {
-  
   const [rowData, setRowData] = useState(rows);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -35,12 +41,13 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  console.log("row",rows)
+  console.log("row", rows);
   useEffect(() => {
     setRowData(rows);
     setCurrentPage(1);
   }, [rows]);
 
+  console.log("pageing", paginatedData);
   return (
     <div className="p-6 bg-[#1C1C1C] rounded-4xl">
       <div className="overflow-auto rounded-lg shadow">
@@ -60,10 +67,17 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
           <tbody>
             {paginatedData &&
               paginatedData.map((row, idx) => (
-                <tr key={idx} className="rounded-xl border-b-2 border-[#303030]">
-                  <td className="px-6 py-3">{row.name}</td>
-                  <td className="px-6 py-3">{row.phone}</td>
-                  <td className="px-6 py-3">{row.email}</td>
+                <tr
+                  key={idx}
+                  className="rounded-xl border-b-2 border-[#303030]"
+                >
+                  <td className="px-6 py-3">{row.additional_fields.name}</td>
+                  <td className="px-6 py-3">
+                    {row.additional_fields?.phone
+                      ? row.additional_fields.phone
+                      : "-"}
+                  </td>
+                  <td className="px-6 py-3">{row.additional_fields.email}</td>
                   <td className="px-6 py-3">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
@@ -90,7 +104,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                       : "-"}
                   </td> */}
 
-<td className="px-6 py-3">{row.call_status}</td>
+                  <td className="px-6 py-3">{row.call_status}</td>
                   <td className="px-6 py-3">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
@@ -119,7 +133,10 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                     {row.calls && row.calls.length > 0 ? (
                       <button
                         onClick={() =>
-                          generateTranscriptPdf(row.calls, row.name)
+                          generateTranscriptPdf(
+                            row.calls,
+                            row.additional_fields.name
+                          )
                         } // Trigger PDF generation
                         className="text-[#63FBEF] underline hover:text-white"
                       >

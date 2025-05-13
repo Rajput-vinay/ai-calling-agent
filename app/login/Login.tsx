@@ -121,9 +121,9 @@ export function Login() {
             
           </div>
 
-          {/* <div className="mb-4 w-full flex justify-end lg:mr-22">
+          <div className="mb-4 w-full flex justify-end lg:mr-22">
           <p className="text-sm cursor-pointer hover:underline" onClick={() => router.push("/forgot-password")}>Forgot password?</p>
-          </div> */}
+          </div>
           
 
           <div className="mb-6 w-full flex justify-center">

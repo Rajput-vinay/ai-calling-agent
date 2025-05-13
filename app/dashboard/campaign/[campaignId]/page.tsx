@@ -12,10 +12,17 @@ interface Call {
   call_transcript: string;
 }
 
-interface Row {
+interface additional_fields {
   name: string;
   phone: string;
   email: string;
+  website_url: string;
+  google_rating: string;
+  facebook_rating: string;
+  instagram_followers: string;
+}
+interface Row {
+  additional_fields: additional_fields;
   time: string;
   call_status: "Not Called" | "Called" | "Answered";
   calls: Call[];
