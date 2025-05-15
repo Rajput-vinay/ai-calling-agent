@@ -112,7 +112,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                         ))
                       : "N/A"}
                   </td>
-                  <td className="px-3 py-3 ">
+                  <td className="px-6 py-3 ">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
                           <div key={index}>
@@ -129,7 +129,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                       : "-"}
                   </td> */}
 
-                  <td className="px-3 py-3 ">
+                  <td className="px-6 py-3 ">
                     {row.calls && row.calls.length > 0 ? (
                       <button
                         onClick={() =>
