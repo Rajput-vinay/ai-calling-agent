@@ -124,7 +124,7 @@ export default async function page ({ params }:Params) {
     //     },
     // ]
     return (
-      <>
+      <div className="flex-1 ">
         <div className="pt-6 md:pt-2 mb-2">
           {/* <h1 className="text-2xl font-semibold">{`< Dashboard > Compaign Name`} </h1> */}
 
@@ -135,8 +135,10 @@ export default async function page ({ params }:Params) {
         {rows.length === 0 ? (
         <p className="text-red-500 mt-4">No data found for this campaign.</p>
       ) : (
+      
         <CallLogTable rows={rows} />
+      
       )}
-        </>
+        </div>
     )
 }

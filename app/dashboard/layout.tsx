@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }:DashboardLayoutProps) {
       </div>
 
       {/* Main content (children will be rendered here) */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 w-full md:max-w-[calc(100%-250px)] mx-auto">
         {children}
       </div>
     </div>

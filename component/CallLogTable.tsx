@@ -47,11 +47,11 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
     setCurrentPage(1);
   }, [rows]);
 
-  console.log("pageing", paginatedData);
+  // console.log("pageing", paginatedData);
   return (
-    <div className="p-6 bg-[#1C1C1C] rounded-4xl">
-      <div className="overflow-auto rounded-lg shadow">
-        <table className="w-full text-sm text-left text-[#8D8D8D] border-b-2 border-[#303030]">
+    <div className="p-6 bg-[#1C1C1C] shadow rounded-4xl  mx-auto">
+      <div className=" overflow-x-auto   border-red-500">
+        <table className="min-w-full  text-sm text-left text-[#8D8D8D] border-b-2 border-[#303030] table-fixed ">
           <thead className="text-xs uppercase text-[#8D8D8D] bg-[#242424] rounded-2xl">
             <tr>
               <th className="px-6 py-3">Name</th>
@@ -71,14 +71,14 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                   key={idx}
                   className="rounded-xl border-b-2 border-[#303030]"
                 >
-                  <td className="px-6 py-3">{row.additional_fields.name}</td>
-                  <td className="px-6 py-3">
+                  <td className="px-6 py-3  ">{row.additional_fields.name}</td>
+                  <td className="px-6 py-3 ">
                     {row.additional_fields?.phone
                       ? row.additional_fields.phone
                       : "-"}
                   </td>
                   <td className="px-6 py-3">{row.additional_fields.email}</td>
-                  <td className="px-6 py-3">
+                  <td className="px-6 py-3 ">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
                           <div key={index}>
@@ -104,15 +104,15 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                       : "-"}
                   </td> */}
 
-                  <td className="px-6 py-3">{row.call_status}</td>
-                  <td className="px-6 py-3">
+                  <td className="px-6 py-3 ">{row.call_status}</td>
+                  <td className="px-6 py-3 ">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
                           <div key={index}>{call.call_sentiment || "N/A"}</div>
                         ))
                       : "N/A"}
                   </td>
-                  <td className="px-6 py-3">
+                  <td className="px-3 py-3 ">
                     {row.calls && row.calls.length > 0
                       ? row.calls.map((call, index) => (
                           <div key={index}>
@@ -129,7 +129,7 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
                       : "-"}
                   </td> */}
 
-                  <td className="px-6 py-3">
+                  <td className="px-3 py-3 ">
                     {row.calls && row.calls.length > 0 ? (
                       <button
                         onClick={() =>
@@ -226,3 +226,4 @@ export default function CallLogTable({ rows }: CallLogTableProps) {
     </div>
   );
 }
+
